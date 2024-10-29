@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player ONE</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Initially show controls for user interaction (fullscreen, etc.) -->
+  <video id="videoPlayer" controls autoplay muted>
+    <source id="videoSource" src="" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const player = document.getElementById('videoPlayer');
+    const source = document.getElementById('videoSource');
+    const socket = io.connect('http://localhost:3000');
+
+    let playlist = [];
+    let currentVideoIndex = 0;
+    let loopSingleVideo = false;
+
+    // Function to load and play a video, hiding controls in the process for playlist loop
+    function loadAndPlayVideo(videoUrl, hideControls = false) {
+      if (hideControls) {
+        player.removeAttribute('controls'); // Hide controls during playlist loop
+      }
+      source.src = videoUrl;
+      player.load();
+      player.play().then(() => {
+        if (hideControls) {
+          player.controls = false; // Keep controls hidden when the video starts
+        }
+      });
+    }
+
+    // Handle playing a single video
+    socket.on('playVideo1', (videoUrl) => {
+      loopSingleVideo = false;  
+      player.controls = true;  
+      loadAndPlayVideo(videoUrl, false);  
+    });
+
+    // Handle playlist loop
+    socket.on('startLoop1', (playlistArray) => {
+      loopSingleVideo = false;  
+      playlist = playlistArray;
+      currentVideoIndex = 0;
+      loadAndPlayVideo(playlist[currentVideoIndex], true);  
+    });
+
+    // Handle single video loop
+    socket.on('loopSingle1', (videoUrl) => {
+      loopSingleVideo = true;  
+      loadAndPlayVideo(videoUrl, true);  
+    });
+
+    // Play the next video or repeat the same one based on the mode
+    player.addEventListener('ended', () => {
+      if (loopSingleVideo) {
+        player.currentTime = 0;  
+        player.play();
+      } else {
+        currentVideoIndex = (currentVideoIndex + 1) % playlist.length;  
+        loadAndPlayVideo(playlist[currentVideoIndex], true);  
+      }
+    });
+
+    // Keep controls visible after initial page load (for user interaction)
+    player.addEventListener('loadeddata', () => {
+      player.controls = true;  // Make sure controls are visible initially
+    });
+  </script>
+</body>
+</html>
