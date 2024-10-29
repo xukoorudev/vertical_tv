@@ -9,14 +9,29 @@
         body { font-family: Arial, sans-serif; }
         h1, h2 { color: #fcfbfb; }
         form { margin-bottom: 20px; }
-        video { width: 150px; height: auto; margin-right: 10px; }
+        video { width: 150px; height: 85px; margin-right: 20px; }
         ul { list-style-type: none; padding: 0; }
         li { margin-bottom: 10px; display: flex; align-items: center; }
-        .delete-btn { color: red; margin-left: 10px; cursor: pointer; }
+        .delete-btn { color: red; background: rgb(240, 162, 162); padding: 8px; border-radius: 6px; margin-left: auto; cursor: pointer; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-900 text-gray-200">
-    <div class="w-full max-w-6xl h-auto bg-gray-800 rounded-lg shadow-lg p-6">
+<body class="bg-gray-900 font-sans items-center justify-center">
+
+    <!-- Navbar -->
+    <header class="bg-gray-700 shadow-md">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <a class="text-2xl font-bold text-indigo-600 hover:text-blue-400" href="/">VT-APP</a>
+        <nav>
+          <a href="/ctrl1" class="text-gray-300 hover:text-indigo-600 px-4">Controller-A</a>
+          <a href="/ctrl2" class="text-gray-300 hover:text-indigo-600 px-4">Controller-B</a>
+          <a href="/play1" class="text-gray-300 hover:text-indigo-600 px-4">Device-A</a>
+          <a href="/play2" class="text-gray-300 hover:text-indigo-600 px-4">Device-B</a>
+          <a href="/video" class="text-gray-300 hover:text-indigo-600 px-4">Manage Videos</a>
+          <a href="#/login" class="text-gray-300 hover:text-indigo-600 px-4">Login</a>
+        </nav>
+      </div>
+    </header>
+    <div class="w-full max-w-6xl  bg-gray-800 rounded-lg shadow-lg p-6 mx-auto my-10">
         <div class="p-4 rounded-lg flex flex-col items-center">
             <h2 class="text-2xl font-semibold mb-4 text-gray-300">Upload Video</h2>
         </div>

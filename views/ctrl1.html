@@ -18,8 +18,24 @@
         .deleteBtn {background-color: #ffffff; color: red; margin-left: 10px; padding: 6px; border-radius: 0.5rem; cursor: pointer; }
       </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6 bg-gray-900 text-gray-200">
-    <div class="w-full max-w-6xl h-auto bg-gray-800 rounded-lg shadow-lg p-6">
+<body class="bg-gray-900 font-sans items-center justify-center">
+
+  <!-- Navbar -->
+  <header class="bg-gray-700 shadow-md">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a class="text-2xl font-bold text-indigo-600 hover:text-blue-400" href="/">VT-APP</a>
+      <nav>
+        <a href="/ctrl1" class="text-gray-300 hover:text-indigo-600 px-4">Controller-A</a>
+        <a href="/ctrl2" class="text-gray-300 hover:text-indigo-600 px-4">Controller-B</a>
+        <a href="/play1" class="text-gray-300 hover:text-indigo-600 px-4">Device-A</a>
+        <a href="/play2" class="text-gray-300 hover:text-indigo-600 px-4">Device-B</a>
+        <a href="/video" class="text-gray-300 hover:text-indigo-600 px-4">Manage Videos</a>
+        <a href="#/login" class="text-gray-300 hover:text-indigo-600 px-4">Login</a>
+      </nav>
+    </div>
+  </header>
+
+    <div class="w-full max-w-6xl h-auto bg-gray-800 rounded-lg shadow-lg p-6 mx-auto my-10">
         <div class="p-4 rounded-lg flex flex-row items-center justify-between">
             <h2 class="text-lg font-semibold mb-4 text-gray-300">Display ONE Controller</h2>
             <a href="/ctrl2" class="flex justify-end ml-auto text-md font-semibold mb-4 bg-blue-500 hover:bg-blue-400 p-2 px-4 rounded-md text-blue-900">Switch to Display TWO</a>
@@ -72,7 +88,7 @@
   
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io.connect('http://localhost:3000');
+      const socket = io.connect('http://192.168.7.171:3000');
       const playlist = document.getElementById('playlist');
       const videoPreview = document.getElementById('videoPreview');  // The video preview element
       let playlistArray = [];
