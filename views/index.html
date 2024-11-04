@@ -1,44 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VT-APP</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com">
+    var BASE_URL = "http://localhost:3000"
+  </script>
   <link href="/css/output.css" rel="stylesheet">
 </head>
-<body class="bg-gray-900 font-sans">
 
-  <!-- Navbar -->
-  <header class="bg-gray-700 shadow-md">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <a class="text-2xl font-bold text-indigo-600 hover:text-blue-400" href="/">VT-APP</a>
-      <nav>
-        <a href="/ctrl1" class="text-gray-300 hover:text-indigo-600 px-4">Controller-A</a>
-        <a href="/ctrl2" class="text-gray-300 hover:text-indigo-600 px-4">Controller-B</a>
-        <a href="/play1" class="text-gray-300 hover:text-indigo-600 px-4">Device-A</a>
-        <a href="/play2" class="text-gray-300 hover:text-indigo-600 px-4">Device-B</a>
-        <a href="/video" class="text-gray-300 hover:text-indigo-600 px-4">Manage Videos</a>
-        <a href="#/login" class="text-gray-300 hover:text-indigo-600 px-4">Login</a>
-      </nav>
+<body class="bg-zinc-900 text-gray-200 min-h-device p-6">
+
+ 
+
+  <h1 class="text-4xl mb-10 mt-10 text-center font-bold text-blue-500">ENG-VTCL</h1>
+  <div class="flex flex-col items-center justify-between">
+    <div id="devicesContainer" class="grid gap-6 md:grid-cols-2 mt-8 lg:grid-cols-4">
+      <!-- Thumbnails will be dynamically added here -->
     </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section id="home" class="h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?nature');">
-    <div class="text-center text-white px-4">
-      <h2 class="text-2xl font-thin mb-12">Welcome </h2>
-      <h2 class="text-5xl font-extrabold">VERTICAL TV APP </h2>
+    
+    
+    
+    <!-- Config Page and Controller Buttons in the Bottom Right Corner -->
+    <div class=" right-6 mt-10 flex mx-auto items-center space-x-4">
+      <a href="/config" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+        Config Page
+      </a>
+      <a href="/controller" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+        Controller
+      </a>
     </div>
-  </section>
+</div>
+  <script>
+    // Fetch devices data 
+    async function loadDevices() {
+      try {
+        const response = await fetch('/devices');
+        
+        if (!response.ok) {
+          console.error('Failed to fetch devices:', response.statusText);
+          return;
+        }
+  
+        const devices = await response.json();
+        console.log('Fetched devices data:', devices);
+  
+        // Reference to the container
+        const devicesContainer = document.getElementById('devicesContainer');
+        devicesContainer.innerHTML = ''; 
+  
+        devices.forEach(device => {
+          // Create a thumbnail for each device
+          const deviceDiv = document.createElement('div');
+          deviceDiv.classList.add('bg-gray-700', 'rounded-lg', 'shadow-lg', 'overflow-hidden', 'hover:shadow-xl', 'transition-shadow', 'duration-300');
+  
+          // Thumbnail inner content
+          deviceDiv.innerHTML = `
+          <a href="${device.route}" class="block relative group">
+            <div class="p-4 flex flex-col items-center mx-auto">
+              
+              <h2 class="text-2xl uppercase font-semibold text-gray-300">${device.name}</h2>
+                  <img src="images/device3.svg" alt="Girl in a jacket" width="50"  class=" m-4 w-full rounded-md px-12 py-4">
+                
+                <p class="text-md text-gray-400 hover:text-yellow-600 py-2">Click to view</p>
+              </div>
+            </a>
+          `;
+  
 
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-700 py-6">
-    <div class="container mx-auto text-center">
-      <p>&copy; Developed By: ENG-Department.</p>
-    </div>
-  </footer>
+          devicesContainer.appendChild(deviceDiv);
+        });
+      } catch (error) {
+        console.error('Error loading devices:', error);
+      }
+    }
+  
+    loadDevices();
+  </script>
 
 </body>
+
 </html>

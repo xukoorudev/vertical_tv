@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controller</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <link href="/css/output.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-900 text-gray-200 p-6">
+
+  <div class="float-start top-8 left-6">
+    <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+      HOME
+    </a>
+  </div>
+<!-- logout-->
+<div class="float-end top-8 left-6">
+    <a href="/logout" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+    LOGOUT
+    </a>
+    
+</div>
+
+  <h1 class="text-4xl mb-6 text-center font-bold text-blue-500">Devices Controller</h1>
+
+  <!-- Device controllers container -->
+  <div id="controllerContainer" class="grid gap-4 md:grid-cols-1 ">
+  </div>
+
+  <script>
+    // var BASE_URL = "http://localhost:3000"
+    var BASE_URL = "http://192.168.7.171:3000"
+    const socket = io.connect(BASE_URL);
+    socket.on('connect_error', (err) => console.error('Socket.IO Connection Error:', err));
+    socket.on('disconnect', (reason) => console.log('Socket.IO Disconnected:', reason));
+
+    const controllerContainer = document.getElementById('controllerContainer');
+
+    async function loadDevices() {
+      const response = await fetch('/devices');
+      const devices = await response.json();
+      devices.forEach(device => createControllerForDevice(device));
+    }
+
+    function createControllerForDevice(device) {
+      const controllerDiv = document.createElement('div');
+      controllerDiv.classList.add('bg-gray-800', 'rounded-lg', 'p-6', 'shadow-lg');
+
+      controllerDiv.innerHTML = `
+        <div class="flex flex-col items-center mb-4">
+          <h2 class="text-lg font-semibold uppercase text-gray-300">${device.name}</h2>
+        </div>
+
+        <div class="flex  gap-4">
+          <!-- Playlist Panel -->
+          <div class="bg-gray-900 w-3/6 p-4 rounded-lg">
+            <h2 class="text-lg font-semibold mb-4 text-gray-300">Playlist</h2>
+            <ul class="playlist space-y-2 overflow-y-auto h-48"></ul>
+
+            <!-- Action Buttons Row under Playlist -->
+            <div class="flex space-x-2 mt-4 text-white">
+              <button class="playSingleBtn flex-1 bg-blue-600 hover:bg-blue-700 text-black font-semibold py-2 px-4 rounded-lg flex sm:flex-col items-center  mx-auto justify-center">
+                <img src="/images/circle-play.svg" alt="Loader" class=" mr-2">
+                <p>Play Selected</>            
+                </button>
+              <button class="loopSingleBtn flex-1 bg-purple-600 hover:bg-purple-700 font-semibold py-2 px-4 rounded-lg flex sm:flex-col items-center mx-auto justify-center" >
+                 <img src="/images/repeat-1.svg" alt="Loader" class=" mr-2">                
+                <p class="text-black">Loop Single</> 
+              </button>
+              <button class="loopPlaylistBtn flex-1 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-2 px-4 rounded-lg flex sm:flex-col items-center mx-auto justify-center" >
+                 <img src="/images/infinity.svg" alt="Loader" class=" mr-2">                
+                <p>Loop Playlist</> 
+              </button>
+            </div>
+          </div>
+
+          <!-- Video Preview Panel -->
+          <div class="bg-gray-900 p-4 w-2/6  rounded-lg">
+            <h2 class="text-lg font-semibold mb-4 text-gray-300">Video Preview</h2>
+            <video class="videoPreview w-full bg-black rounded-lg mb-4" controls></video>
+          </div>
+
+          <!-- File Upload Form -->
+          <div class="bg-gray-900 p-4 w-2/6 rounded-lg">
+            <h2 class="text-lg font-semibold mb-4 text-gray-300">Upload New Video</h2>
+               <form class="uploadForm">
+                  <label for='input-file${device.name}' id="drop-area${device.name}" 
+                    class="bg-gray-800 p-8 items-center rounded-md flex flex-col justify-center mx-auto"
+                    >
+  
+                    <input type="file" id="input-file${device.name}" name="videoFile" accept="video/*" class="block w-full hidden text-sm bg-gray-500 rounded-lg border border-gray-300 cursor-pointer">
+                    <div id="img-view${device.name}" class="flex flex-col rounded-md p-[6%] w-full  border-2 border-dashed border-gray-500 items-center bg-cover">
+                        <img src="/images/icon.png" alt="" class="w-20 h-auto ">
+
+                        <p <strong>Click here</strong> to upload video</p>
+                        <div id="file-upload-filename"></div>
+                        <span class="text-sm text-gray-500">Upload any mp4 videos from your files!</span>
+                    </div>
+                  </label>
+                    <button type="submit" class="submit-button w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 flex items-center justify-center">
+                      <img src="/images/loader.svg" alt="Loader" class="loading-icon text-gray-200 animate-spin mr-2 hidden">
+                      <p>Upload Video</p>
+                    </button>
+              </form>
+          </div>
+      `;
+
+      controllerContainer.appendChild(controllerDiv);
+
+      const playlist = controllerDiv.querySelector('.playlist');
+      const videoPreview = controllerDiv.querySelector('.videoPreview');
+      const uploadForm = controllerDiv.querySelector('.uploadForm');
+      const playSingleBtn = controllerDiv.querySelector('.playSingleBtn');
+      const loopSingleBtn = controllerDiv.querySelector('.loopSingleBtn');
+      const loopPlaylistBtn = controllerDiv.querySelector('.loopPlaylistBtn');
+
+      async function loadPlaylist() {
+        const response = await fetch(`/videos/${device.name}`);
+        const videos = await response.json();
+        playlist.innerHTML = '';
+        videos.forEach(videoUrl => {
+          const li = document.createElement('li');
+          const fileName = videoUrl.split('/').pop();
+          li.classList.add('p-2', 'bg-gray-600', 'rounded-md', 'text-sm', 'cursor-pointer', 'text-gray-200', 'flex', 'justify-between', 'items-center');
+          li.dataset.url = videoUrl;
+
+          // Video play click event on the list item (span for video title)
+          const videoTitle = document.createElement('span');
+          videoTitle.innerText = fileName;
+          videoTitle.classList.add('cursor-pointer');
+          // videoTitle.onclick = () => {
+          //   document.querySelectorAll('.playlist li').forEach(item => item.classList.remove('selected'));
+          //   li.classList.add('selected');
+          //   videoPreview.src = videoUrl;
+          //   videoPreview.load();
+          //   videoPreview.play();
+          // };
+          li.onclick = () => {
+          document.querySelectorAll('#playlist li').forEach(item => item.classList.remove('selected'));
+          li.classList.add('selected');
+          videoPreview.src = li.dataset.url;
+          videoPreview.load();  
+          videoPreview.play();  
+        };
+
+
+          // Delete button event
+          const deleteBtn = document.createElement('button');
+          deleteBtn.innerText = 'Delete';
+          deleteBtn.classList.add('deleteBtn', 'bg-red-500', 'text-white-500', 'rounded', 'px-2', 'ml-2');
+          deleteBtn.onclick = async (e) => {
+            e.stopPropagation();
+            const confirmed = confirm(`Are you sure you want to delete ${fileName}?`);
+            if (confirmed) {
+              const deleteResponse = await fetch(`/videos/${device.name}/${fileName}`, { method: 'DELETE' });
+              if (deleteResponse.ok) {
+                loadPlaylist();
+              } else {
+                alert('Failed to delete video');
+              }
+            }
+          };
+
+          li.appendChild(videoTitle);
+          li.appendChild(deleteBtn);
+          playlist.appendChild(li);
+        });
+      }
+
+  const dropArea = document.getElementById(`drop-area${device.name}`)
+   const inputFile = document.getElementById(`input-file${device.name}`)
+   const imageView = document.getElementById(`img-view${device.name}`)
+
+   inputFile.addEventListener("change", uploadImage);
+
+   function uploadImage() {
+      let videoLink = URL.createObjectURL(inputFile.files[0]);
+      imageView.style.backgroundImage = `url(${videoLink})`;
+      imageView.textContent = `Video selected, Ready to Upload!`;
+   }
+
+      uploadForm.onsubmit = async (e) => {
+        // e.preventDefault();
+        const formData = new FormData(uploadForm);
+        const response = await fetch(`/upload/${device.name}`, { method: 'POST', body: formData });
+        if (response.ok) {
+          alert('Video uploaded successfully');
+          loadPlaylist(); 
+        } else {
+          alert('Upload failed');
+        }
+      };
+
+      playSingleBtn.onclick = () => {
+        const selectedVideo = playlist.querySelector('.selected');
+        if (selectedVideo) {
+          const videoUrl = selectedVideo.dataset.url;
+          socket.emit('playVideo', { device: device.name, videoUrl });
+        } else {
+          alert('Select a video from the playlist');
+        }
+      };
+
+      loopSingleBtn.onclick = () => {
+        const selectedVideo = playlist.querySelector('.selected');
+        if (selectedVideo) {
+          const videoUrl = selectedVideo.dataset.url;
+          socket.emit('loopSingle', { device: device.name, videoUrl });
+        } else {
+          alert('Select a video to loop');
+        }
+      };
+
+      loopPlaylistBtn.onclick = () => {
+        const videoUrls = Array.from(playlist.children).map(li => li.dataset.url);
+        if (videoUrls.length > 0) {
+          console.log(`Starting playlist loop on device: ${device.name} with URLs:`, videoUrls);
+          socket.emit('startLoop', { device: device.name, videoUrls });
+        } else {
+          alert('No videos in the playlist');
+        }
+      };
+
+
+      loadPlaylist();
+    }
+
+    loadDevices();
+  </script>
+  <script>
+    $(document).ready(function() {
+      $(".submit-button").on("click", function() {
+        $(".loading-icon").removeClass("hidden");
+        $(".submit-button").attr("disabled". true);
+      })
+    })
+ </script>
+</body>
+
+</html>
