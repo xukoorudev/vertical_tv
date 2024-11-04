@@ -33,6 +33,7 @@
 
   <script>
     // var BASE_URL = "http://localhost:3000"
+    // var BASE_URL = "http://192.168.0.154:3000"
     var BASE_URL = "http://192.168.7.171:3000"
     const socket = io.connect(BASE_URL);
     socket.on('connect_error', (err) => console.error('Socket.IO Connection Error:', err));
@@ -177,7 +178,7 @@
    }
 
       uploadForm.onsubmit = async (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         const formData = new FormData(uploadForm);
         const response = await fetch(`/upload/${device.name}`, { method: 'POST', body: formData });
         if (response.ok) {
