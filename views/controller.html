@@ -132,13 +132,6 @@
           const videoTitle = document.createElement('span');
           videoTitle.innerText = fileName;
           videoTitle.classList.add('cursor-pointer');
-          // videoTitle.onclick = () => {
-          //   document.querySelectorAll('.playlist li').forEach(item => item.classList.remove('selected'));
-          //   li.classList.add('selected');
-          //   videoPreview.src = videoUrl;
-          //   videoPreview.load();
-          //   videoPreview.play();
-          // };
           li.onclick = () => {
           document.querySelectorAll('#playlist li').forEach(item => item.classList.remove('selected'));
           li.classList.add('selected');
@@ -231,14 +224,6 @@
 
     loadDevices();
   </script>
-  <script>
-    $(document).ready(function() {
-      $(".submit-button").on("click", function() {
-        $(".loading-icon").removeClass("hidden");
-        $(".submit-button").attr("disabled". true);
-      })
-    })
- </script>
 </body>
 
 </html>

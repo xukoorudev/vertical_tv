@@ -68,7 +68,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     // Simple authentication: replace with more secure solution in production
-    if (username === 'admin' && password === "Admin@eng") {
+    if (username === 'admin' && password === "Admin@1234") {
         req.session.isAuthenticated = true;
         res.redirect('/config');
     } else {
