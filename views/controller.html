@@ -185,15 +185,15 @@
         }
       };
 
-      playSingleBtn.onclick = () => {
-        const selectedVideo = playlist.querySelector('.selected');
-        if (selectedVideo) {
-          const videoUrl = selectedVideo.dataset.url;
-          socket.emit('playVideo', { device: device.name, videoUrl });
-        } else {
-          alert('Select a video from the playlist');
-        }
-      };
+      // playSingleBtn.onclick = () => {
+      //   const selectedVideo = playlist.querySelector('.selected');
+      //   if (selectedVideo) {
+      //     const videoUrl = selectedVideo.dataset.url;
+      //     socket.emit('playVideo', { device: device.name, videoUrl });
+      //   } else {
+      //     alert('Select a video from the playlist');
+      //   }
+      // };
 
       loopSingleBtn.onclick = () => {
         const selectedVideo = playlist.querySelector('.selected');
