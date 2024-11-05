@@ -98,10 +98,10 @@
                         <span class="text-sm text-gray-500">Upload any mp4 videos from your files!</span>
                     </div>
                   </label>
-                    <button type="submit" class="submit-button w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 flex items-center justify-center">
-                      <img src="/images/loader.svg" alt="Loader" class="loading-icon text-gray-200 animate-spin mr-2 hidden">
-                      <p>Upload Video</p>
-                    </button>
+                  <button type="submit" class="submit-button w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 flex items-center justify-center">
+                    <img src="/images/loader.svg" alt="Loader" class="loading-icon text-gray-200 animate-spin mr-2 hidden">
+                    <p>Upload Video</p>
+                  </button>
               </form>
           </div>
       `;
@@ -122,7 +122,7 @@
         videos.forEach(videoUrl => {
           const li = document.createElement('li');
           const fileName = videoUrl.split('/').pop();
-          li.classList.add('p-2', 'bg-gray-600', 'rounded-md', 'text-sm', 'cursor-pointer', 'text-gray-200', 'flex', 'justify-between', 'items-center');
+          li.classList.add('p-2', 'bg-gray-600/50', 'rounded-md', 'text-md', 'cursor-pointer', 'text-gray-200', 'flex', 'justify-between', 'items-center');
           li.dataset.url = videoUrl;
 
           // Video play click event on the list item (span for video title)
@@ -161,23 +161,53 @@
         });
       }
 
-  const dropArea = document.getElementById(`drop-area${device.name}`)
-   const inputFile = document.getElementById(`input-file${device.name}`)
-   const imageView = document.getElementById(`img-view${device.name}`)
-
-   inputFile.addEventListener("change", uploadImage);
-
-   function uploadImage() {
-      let videoLink = URL.createObjectURL(inputFile.files[0]);
-      imageView.style.backgroundImage = `url(${videoLink})`;
-      imageView.textContent = `Video selected, Ready to Upload!`;
-   }
-
       uploadForm.onsubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(uploadForm);
+        uploadForm.innerHTML = `
+           <form class="uploadForm">
+              <label for='input-file${device.name}' id="drop-area${device.name}" 
+                class="bg-gray-800 p-8 items-center rounded-md flex flex-col justify-center mx-auto"
+                >
+
+                <input type="file" id="input-file${device.name}" name="videoFile" accept="video/*" class="block w-full hidden text-sm bg-gray-500 rounded-lg border border-gray-300 cursor-pointer">
+                <div id="img-view${device.name}" class="flex flex-col rounded-md p-[6%] w-full  border-2 border-dashed border-gray-500 items-center bg-cover">
+                    <img src="/images/icon.png" alt="" class="w-20 h-auto ">
+
+                    <p <strong>Click here</strong> to upload video</p>
+                    <div id="file-upload-filename"></div>
+                    <span class="text-sm text-gray-500">Upload any mp4 videos from your files!</span>
+                </div>
+              </label>
+              <button type="submit" class="submit-button w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 flex items-center justify-center">
+                <img src="/images/loader.svg" alt="Loader" class="loading-icon text-gray-200 animate-spin mr-2">
+                <p>Uploading...</p>
+              </button>
+            </form>
+          `
         const response = await fetch(`/upload/${device.name}`, { method: 'POST', body: formData });
         if (response.ok) {
+          uploadForm.innerHTML = `
+          <form class="uploadForm">
+            <label for='input-file${device.name}' id="drop-area${device.name}" 
+            class="bg-gray-800 p-8 items-center rounded-md flex flex-col justify-center mx-auto"
+            >
+            
+            <input type="file" id="input-file${device.name}" name="videoFile" accept="video/*" class="block w-full hidden text-sm bg-gray-500 rounded-lg border border-gray-300 cursor-pointer">
+            <div id="img-view${device.name}" class="flex flex-col rounded-md p-[6%] w-full  border-2 border-dashed border-gray-500 items-center bg-cover">
+              <img src="/images/icon.png" alt="" class="w-20 h-auto ">
+              
+              <p <strong>Click here</strong> to upload video</p>
+              <div id="file-upload-filename"></div>
+              <span class="text-sm text-gray-500">Upload any mp4 videos from your files!</span>
+              </div>
+              </label>
+              <button type="submit" class="submit-button w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 flex items-center justify-center">
+                <img src="/images/loader.svg" alt="Loader" class="loading-icon text-gray-200 animate-spin mr-2 hidden">
+                <p>Upload Video</p>
+                </button>
+                </form>
+                `
           alert('Video uploaded successfully');
           loadPlaylist(); 
         } else {
@@ -185,21 +215,12 @@
         }
       };
 
-      // playSingleBtn.onclick = () => {
-      //   const selectedVideo = playlist.querySelector('.selected');
-      //   if (selectedVideo) {
-      //     const videoUrl = selectedVideo.dataset.url;
-      //     socket.emit('playVideo', { device: device.name, videoUrl });
-      //   } else {
-      //     alert('Select a video from the playlist');
-      //   }
-      // };
-
       loopSingleBtn.onclick = () => {
         const selectedVideo = playlist.querySelector('.selected');
         if (selectedVideo) {
           const videoUrl = selectedVideo.dataset.url;
           socket.emit('loopSingle', { device: device.name, videoUrl });
+          loadPlaylist();
         } else {
           alert('Select a video to loop');
         }

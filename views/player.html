@@ -48,12 +48,12 @@
       });
     }
 
-    // Handle playing a single video
-    socket.on('playVideo', (videoUrl) => {
-      loopSingleVideo = false;  
-      player.controls = true;  
-      loadAndPlayVideo(videoUrl, false);  
-    });
+    // // Handle playing a single video
+    // socket.on('playVideo', (videoUrl) => {
+    //   loopSingleVideo = true;  
+    //   player.controls = true;  
+    //   loadAndPlayVideo(videoUrl, false);  
+    // });
 
     // Handle playlist loop
     socket.on('startLoop', (playlistArray) => {
