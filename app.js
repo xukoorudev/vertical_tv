@@ -70,7 +70,7 @@ app.post('/login', (req, res) => {
     // Simple authentication: replace with more secure solution in production
     if (username === 'admin' && password === "Admin@1234") {
         req.session.isAuthenticated = true;
-        res.redirect('/config');
+        res.redirect('/controller');
     } else {
         res.redirect('/login'); // Redirect to login if authentication fails
     }
