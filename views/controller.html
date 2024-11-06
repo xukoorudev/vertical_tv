@@ -33,8 +33,8 @@
 
   <script>
     // var BASE_URL = "http://localhost:3000"
-    // var BASE_URL = "http://192.168.0.154:3000"
-    var BASE_URL = "http://192.168.7.171:3000"
+    var BASE_URL = "http://192.168.0.154:3000"
+    // var BASE_URL = "http://192.168.7.171:3000"
     const socket = io.connect(BASE_URL);
     socket.on('connect_error', (err) => console.error('Socket.IO Connection Error:', err));
     socket.on('disconnect', (reason) => console.log('Socket.IO Disconnected:', reason));
@@ -161,10 +161,13 @@
         });
       }
 
+
       uploadForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(uploadForm);
-        uploadForm.innerHTML = `
+
+
+          e.preventDefault();
+          const formData = new FormData(uploadForm);
+          uploadForm.innerHTML = `
            <form class="uploadForm">
               <label for='input-file${device.name}' id="drop-area${device.name}" 
                 class="bg-gray-800 p-8 items-center rounded-md flex flex-col justify-center mx-auto"
@@ -172,11 +175,8 @@
 
                 <input type="file" id="input-file${device.name}" name="videoFile" accept="video/*" class="block w-full hidden text-sm bg-gray-500 rounded-lg border border-gray-300 cursor-pointer">
                 <div id="img-view${device.name}" class="flex flex-col rounded-md p-[6%] w-full  border-2 border-dashed border-gray-500 items-center bg-cover">
-                    <img src="/images/icon.png" alt="" class="w-20 h-auto ">
-
-                    <p <strong>Click here</strong> to upload video</p>
-                    <div id="file-upload-filename"></div>
-                    <span class="text-sm text-gray-500">Upload any mp4 videos from your files!</span>
+                    <img src="/images/selected.png" alt="" class="w-20 h-auto ">
+                    <strong>Please wait file uploading to server!</strong>
                 </div>
               </label>
               <button type="submit" class="submit-button w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 flex items-center justify-center">
