@@ -33,8 +33,8 @@
 
   <script>
     // var BASE_URL = "http://localhost:3000"
-    var BASE_URL = "http://192.168.0.154:3000"
-    // var BASE_URL = "http://192.168.7.171:3000"
+    // var BASE_URL = "http://192.168.0.154:3000"
+    var BASE_URL = "http://192.168.7.171:3000"
     const socket = io.connect(BASE_URL);
     socket.on('connect_error', (err) => console.error('Socket.IO Connection Error:', err));
     socket.on('disconnect', (reason) => console.log('Socket.IO Disconnected:', reason));
