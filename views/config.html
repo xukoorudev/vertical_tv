@@ -54,11 +54,11 @@
 
                 devices.forEach(device => {
                     const deviceDiv = document.createElement('div');
-                    deviceDiv.classList.add('bg-gray-700', 'rounded-lg', 'p-6', 'overflow-hidden', 'shadow-lg', 'transform', 'transition', 'hover:scale-105', 'hover:shadow-xl');
+                    deviceDiv.classList.add('bg-gray-800', 'rounded-lg', 'p-6', 'overflow-hidden', 'shadow-lg', 'transform', 'transition', 'hover:scale-105', 'hover:shadow-xl');
 
                   deviceDiv.innerHTML = `
                     <div class="p-4 flex flex-col items-center">                        
-                        <span class="text-blue-200 uppercase text-2xl">${device.name}</span>
+                        <span class="text-yellow-400 uppercase text-2xl">${device.name}</span>
                         <img src="images/device3.svg" alt="Girl in a jacket"  class=" m-4 w-full rounded-md px-12 py-4">
                       <button class="removeDeviceBtn bg-red-200 hover:bg-red-300 text-red-700 font-semibold py-1 px-3 rounded-md transition"
                       data-device="${device.name}">Remove</button>

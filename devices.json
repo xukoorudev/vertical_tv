@@ -2,5 +2,9 @@
   {
     "name": "Vertical-1",
     "route": "/device/Vertical-1"
+  },
+  {
+    "name": "Vertical-2",
+    "route": "/device/Vertical-2"
   }
 ]

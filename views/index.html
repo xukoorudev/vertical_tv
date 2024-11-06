@@ -54,17 +54,17 @@
         devices.forEach(device => {
           // Create a thumbnail for each device
           const deviceDiv = document.createElement('div');
-          deviceDiv.classList.add('bg-gray-700', 'rounded-lg', 'shadow-lg', 'overflow-hidden', 'hover:shadow-xl', 'transition-shadow', 'duration-300');
+          deviceDiv.classList.add('bg-gray-800', 'rounded-lg', 'shadow-lg', 'overflow-hidden', 'hover:shadow-xl', 'transition-shadow', 'duration-300');
   
           // Thumbnail inner content
           deviceDiv.innerHTML = `
           <a href="${device.route}" class="block relative group">
             <div class="p-4 flex flex-col items-center mx-auto">
               
-              <h2 class="text-2xl uppercase font-semibold text-gray-300">${device.name}</h2>
+              <h2 class="text-2xl uppercase font-semibold text-yellow-400">${device.name}</h2>
                   <img src="images/device3.svg" alt="Girl in a jacket" width="50"  class=" m-4 w-full rounded-md px-12 py-4">
                 
-                <p class="text-md text-gray-400 hover:text-yellow-600 py-2">Click to view</p>
+                <p class="text-md text-yellow-400 hover:text-yellow-600 py-2">Click to view</p>
               </div>
             </a>
           `;
