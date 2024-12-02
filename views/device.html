@@ -22,7 +22,9 @@
     </style>
 </head>
 <body>
-    <video id="videoPlayer" autoplay muted></video>
+    
+    <video id="videoPlayer" autoplay muted src="/images/PSM AIR AD For Vertical TV.mp4"></video>
+ 
 
     <script>
         const player = document.getElementById('videoPlayer');
@@ -33,7 +35,7 @@
 
         let playlist = [];
         let currentVideoIndex = 0;
-        let loopSingleVideo = false;
+        let loopSingleVideo = true;
 
         console.log(`Device initialized with deviceName: ${deviceName}`);
 
@@ -82,7 +84,7 @@
 
         socket.on('playVideo', ({ device, videoUrl }) => {
             if (device === deviceName) {
-                loopSingleVideo = false;
+                loopSingleVideo = true;
                 loadAndPlayVideo(videoUrl);
             }
         });
